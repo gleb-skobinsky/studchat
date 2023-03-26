@@ -5,9 +5,7 @@ import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.res.useResource
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
@@ -15,7 +13,7 @@ import androidx.compose.ui.window.singleWindowApplication
 fun main() {
     val iconPainter = BitmapPainter(useResource("jetchat_icon.png", ::loadImageBitmap))
     singleWindowApplication(
-        title = "TeslaApp",
+        title = "StudChat",
         state = WindowState(
             placement = WindowPlacement.Maximized,
         ),

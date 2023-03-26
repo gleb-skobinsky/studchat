@@ -25,4 +25,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "TeslaApp"
+rootProject.name = "StudChat"

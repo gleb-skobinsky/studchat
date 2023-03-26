@@ -213,7 +213,7 @@ compose.experimental {
     web.application {}
     uikit.application {
         bundleIdPrefix = "ru.agladkov"
-        projectName = "TeslaApp"
+        projectName = "StudChat"
         deployConfigurations {
             simulator("IPhone13") {
                 //Usage: ./gradlew iosDeployIPhone13Debug
@@ -244,7 +244,7 @@ compose.desktop.nativeApplication {
     targets(kotlin.targets.getByName("macosX64"))
     distributions {
         targetFormats(org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg)
-        packageName = "TeslaApp"
+        packageName = "StudChat"
         packageVersion = "1.0.0"
     }
 }
