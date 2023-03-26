@@ -1,0 +1,12 @@
+#root {
+    width: 100vw;
+    height: 100vh;
+}
+.wasmCanvas {
+    width: 100% !important;
+    height: 100vh !important;
+}
+body {
+    height: calc(100vh - 5px);
+    margin: 0px !important;
+}
