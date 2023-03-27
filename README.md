@@ -1,7 +1,7 @@
 # Chat app
 ### Compose MPP 
 
-An example Compose Multiplatform chat app, built using the JetChat composables.
+An example Compose Multiplatform chat app, built using the [JetChat](https://androidexample365.com/a-sample-chat-app-built-with-jetpack-compose/) composables.
 
 Can be run on platforms: Android/iOS/Web/Desktop
 
