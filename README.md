@@ -1,5 +1,4 @@
-# Chat app
-### Compose MPP 
+# Chat app with Compose Multiplatform
 
 An example Compose Multiplatform chat app, built using the JetChat composables.
 
@@ -17,12 +16,12 @@ How to use:
 
 Android:
 
-![alt text](https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/android.png)
+![Android](https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/android.png)
 
 Desktop: 
 
-![alt text](https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/desktop.png)
+![Desktop](https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/desktop.png)
 
 Browser:
 
-![alt text](https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/web.png)
+![Browser](https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/web.png)
