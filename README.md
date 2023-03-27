@@ -12,3 +12,17 @@ How to use:
 4. To run as a desktop app: `./gradlew run`
 
 ### iOS andMacOS will be coming soon
+
+### This is how the UI looks like at the present stage
+
+Android:
+
+![alt text](https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/android.png)
+
+Desktop: 
+
+![alt text](https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/desktop.png)
+
+Browser:
+
+![alt text](https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/web.png)
