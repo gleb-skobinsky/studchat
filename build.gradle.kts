@@ -25,6 +25,7 @@ repositories {
     google()
 }
 
+@OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 kotlin {
     jvm("desktop")
     android()
@@ -88,6 +89,7 @@ kotlin {
                 implementation(compose.material)
                 implementation(compose.runtime)
                 implementation(compose.materialIconsExtended)
+                implementation(compose.material3)
             }
         }
 
