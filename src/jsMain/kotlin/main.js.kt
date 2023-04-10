@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.window.Window
 import composables.Conversation
+import data.AdditionalUiState
 import data.exampleUiState
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -35,8 +36,9 @@ fun main() {
                     }
                 }
             }
+            val uiState = AdditionalUiState()
             Column {
-                Conversation(exampleUiState, coroutineScope, scrollState, ws, themeState = theme)
+                Conversation(exampleUiState, coroutineScope, scrollState, ws, themeState = theme, uiState = uiState)
             }
             window.addEventListener("wheel", {
                 val delta = (it as WheelEvent).deltaY

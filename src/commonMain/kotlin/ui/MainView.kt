@@ -1,12 +1,11 @@
 package org.jetbrains.studchat.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import composables.Conversation
 import data.AdditionalUiState
 import data.exampleUiState
-import org.jetbrains.studchat.messagesParser.*
 import platform.getPlatformWebsocket
 import themes.DarkTheme
 import themes.LightTheme
