@@ -1,7 +1,8 @@
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import composables.Conversation
+import data.AdditionalUiState
 import data.exampleUiState
 import platform.getPlatformWebsocket
 import themes.DarkTheme
@@ -10,14 +11,14 @@ import themes.ThemeMode
 
 @Composable
 @Suppress("FunctionName")
-fun MainView() {
+fun MainView(uiState: AdditionalUiState) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
     val ws: Any? = remember { getPlatformWebsocket() }
-    val themeMode = remember { mutableStateOf(ThemeMode.LIGHT) }
-    val theme = remember(themeMode.value) {
+    val themeMode by uiState.themeMode.collectAsState()
+    val theme = remember(themeMode) {
         derivedStateOf {
-            when(themeMode.value) {
+            when (themeMode) {
                 ThemeMode.LIGHT -> LightTheme
                 ThemeMode.DARK -> DarkTheme
             }
@@ -29,7 +30,8 @@ fun MainView() {
             themeState = theme,
             scope = coroutineScope,
             scrollState = scrollState,
-            webSocket = ws
+            webSocket = ws,
+            uiState = uiState
         )
     }
 }

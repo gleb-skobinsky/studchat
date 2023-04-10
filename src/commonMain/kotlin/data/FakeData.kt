@@ -1,10 +1,13 @@
 package data
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
 import composables.Message
 import generated.drawable_sticker
+import kotlinx.coroutines.flow.MutableStateFlow
 import platform.generateUuid
+import themes.ThemeMode
 
 private val initialMessages = listOf(
     Message(
@@ -97,7 +100,7 @@ data class ProfileScreenState(
     val position: String,
     val twitter: String = "",
     val timeZone: String?, // Null if me
-    val commonChannels: String? // Null if me
+    val commonChannels: String?, // Null if me
 ) {
     fun isMe() = userId == meProfile.userId
 }
@@ -105,7 +108,7 @@ data class ProfileScreenState(
 class ConversationUiState(
     val channelName: String,
     val channelMembers: Int,
-    initialMessages: List<Message>
+    initialMessages: List<Message>,
 ) {
     private val _messages: MutableList<Message> =
         mutableStateListOf(*initialMessages.toTypedArray())
@@ -115,3 +118,9 @@ class ConversationUiState(
         _messages.add(0, msg) // Add to the beginning of the list
     }
 }
+
+@Stable
+data class AdditionalUiState(
+    val themeMode: MutableStateFlow<ThemeMode> = MutableStateFlow(ThemeMode.LIGHT),
+    val drawerShouldBeOpened: MutableStateFlow<Boolean> = MutableStateFlow(false),
+)

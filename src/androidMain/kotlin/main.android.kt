@@ -4,6 +4,7 @@ import MainView
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import data.AdditionalUiState
 import java.io.File
 import java.io.FileOutputStream
 
@@ -11,10 +12,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         copyAssets()
+        val uiState = AdditionalUiState()
         // _HomeFolder = filesDir
 
         setContent {
-            MainView()
+            MainView(uiState)
         }
     }
 

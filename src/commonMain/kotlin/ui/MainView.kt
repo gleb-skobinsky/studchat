@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import composables.Conversation
+import data.AdditionalUiState
 import data.exampleUiState
 import org.jetbrains.studchat.messagesParser.*
 import platform.getPlatformWebsocket
@@ -15,7 +16,7 @@ import themes.ThemeMode
 
 @Composable
 @Suppress("FunctionName")
-fun MainView() {
+fun MainView(uiState: AdditionalUiState) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
     val ws: Any? = remember { getPlatformWebsocket() }
@@ -29,7 +30,7 @@ fun MainView() {
         }
     }
     Column {
-        Conversation(exampleUiState, coroutineScope, scrollState, ws, themeState = theme)
+        Conversation(exampleUiState, coroutineScope, scrollState, ws, themeState = theme, uiState = uiState)
     }
 }
 

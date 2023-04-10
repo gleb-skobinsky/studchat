@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
+import data.AdditionalUiState
 
 fun main() {
     val iconPainter = BitmapPainter(useResource("jetchat_icon.png", ::loadImageBitmap))
@@ -22,6 +23,7 @@ fun main() {
         SideEffect {
             window.iconImage = iconPainter.toAwtImage(density, LayoutDirection.Ltr, Size(128f, 128f))
         }
-        MainView()
+        val uiState = AdditionalUiState()
+        MainView(uiState)
     }
 }
