@@ -7,10 +7,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -30,12 +27,60 @@ fun Conversation(
     scope: CoroutineScope,
     scrollState: LazyListState,
     webSocket: Any?,
-    onNavIconPressed: () -> Unit = { },
     themeState: State<Theme>,
     uiState: AdditionalUiState
 ) {
     val scaffoldState = rememberScaffoldState()
     val drawerOpen by uiState.drawerShouldBeOpened.collectAsState()
+    if (drawerOpen) {
+        // Open drawer and reset state in VM.
+        LaunchedEffect(Unit) {
+            scaffoldState.drawerState.open()
+            uiState.resetOpenDrawerAction()
+        }
+    }
+
+    JetchatScaffold(
+        scaffoldState,
+        onChatClicked = {
+            scope.launch {
+                scaffoldState.drawerState.close()
+            }
+        },
+        onProfileClicked = {
+            scope.launch {
+                scaffoldState.drawerState.close()
+            }
+        }
+    ) {
+        ConversationContent(
+            conversationUiState = conversationUiState,
+            scrollState = scrollState,
+            themeState = themeState,
+            webSocket = webSocket,
+            scope = scope,
+            onNavIconPressed = {
+                scope.launch {
+                    scaffoldState.drawerState.open()
+                }
+            }
+        )
+    }
+
+
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ConversationContent(
+    conversationUiState: ConversationUiState,
+    scrollState: LazyListState,
+    themeState: State<Theme>,
+    webSocket: Any?,
+    scope: CoroutineScope,
+    onNavIconPressed: () -> Unit,
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Box(modifier = Modifier.fillMaxSize()) {
         Messages(conversationUiState, scrollState, themeState)

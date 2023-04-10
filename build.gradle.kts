@@ -90,6 +90,8 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.materialIconsExtended)
                 implementation(compose.material3)
+                // implementation(Odyssey.core)
+                // implementation(Odyssey.compose)
             }
         }
 
@@ -338,4 +340,9 @@ object DrawableCodeGenerator {
         }
         file.writeText(joinToString(System.lineSeparator()))
     }
+}
+
+object Odyssey {
+    const val core = "io.github.alexgladkov:odyssey-core:0.1.4"
+    const val compose = "io.github.alexgladkov:odyssey-compose:0.1.4"
 }

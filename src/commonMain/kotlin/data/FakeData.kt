@@ -4,8 +4,11 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
 import composables.Message
+import generated.drawable_ali
+import generated.drawable_someone_else
 import generated.drawable_sticker
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import platform.generateUuid
 import themes.ThemeMode
 
@@ -65,7 +68,7 @@ val exampleUiState = ConversationUiState(
  */
 val colleagueProfile = ProfileScreenState(
     userId = "12345",
-    photo = "someone_else.jpg",
+    photo = drawable_someone_else,
     name = "Taylor Brooks",
     status = "Away",
     displayName = "taylor",
@@ -80,7 +83,7 @@ val colleagueProfile = ProfileScreenState(
  */
 val meProfile = ProfileScreenState(
     userId = "me",
-    photo = "ali.png",
+    photo = drawable_ali,
     name = "Ali Conors",
     status = "Online",
     displayName = "aliconors",
@@ -93,7 +96,7 @@ val meProfile = ProfileScreenState(
 @Immutable
 data class ProfileScreenState(
     val userId: String,
-    val photo: String?,
+    val photo: Any?,
     val name: String,
     val status: String,
     val displayName: String,
@@ -120,7 +123,15 @@ class ConversationUiState(
 }
 
 @Stable
-data class AdditionalUiState(
-    val themeMode: MutableStateFlow<ThemeMode> = MutableStateFlow(ThemeMode.LIGHT),
-    val drawerShouldBeOpened: MutableStateFlow<Boolean> = MutableStateFlow(false),
-)
+class AdditionalUiState() {
+    val themeMode: MutableStateFlow<ThemeMode> = MutableStateFlow(ThemeMode.LIGHT)
+    private val _drawerShouldBeOpened: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val drawerShouldBeOpened: StateFlow<Boolean> = _drawerShouldBeOpened
+    fun openDrawer() {
+        _drawerShouldBeOpened.value = true
+    }
+
+    fun resetOpenDrawerAction() {
+        _drawerShouldBeOpened.value = false
+    }
+}
