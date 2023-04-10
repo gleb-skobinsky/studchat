@@ -7,6 +7,9 @@ import composables.Conversation
 import data.exampleUiState
 import org.jetbrains.studchat.messagesParser.*
 import platform.getPlatformWebsocket
+import themes.DarkTheme
+import themes.LightTheme
+import themes.ThemeMode
 
 // private val client by lazy { OkHttpClient() }
 
@@ -16,8 +19,17 @@ fun MainView() {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
     val ws: Any? = remember { getPlatformWebsocket() }
+    val themeMode = remember { mutableStateOf(ThemeMode.LIGHT) }
+    val theme = remember(themeMode.value) {
+        derivedStateOf {
+            when(themeMode.value) {
+                ThemeMode.LIGHT -> LightTheme
+                ThemeMode.DARK -> DarkTheme
+            }
+        }
+    }
     Column {
-        Conversation(exampleUiState, coroutineScope, scrollState, ws)
+        Conversation(exampleUiState, coroutineScope, scrollState, ws, themeState = theme)
     }
 }
 

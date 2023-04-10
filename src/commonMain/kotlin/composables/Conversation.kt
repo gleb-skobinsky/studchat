@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 import platform.generateUuid
 import platform.getTimeNow
 import platform.onMessageEnter
+import themes.Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,10 +27,11 @@ fun Conversation(
     scrollState: LazyListState,
     webSocket: Any?,
     onNavIconPressed: () -> Unit = { },
+    themeState: State<Theme>,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Box(modifier = Modifier.fillMaxSize()) {
-        Messages(conversationUiState, scrollState)
+        Messages(conversationUiState, scrollState, themeState)
         Column(
             Modifier
                 .align(Alignment.BottomCenter)

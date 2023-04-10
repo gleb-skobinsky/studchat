@@ -14,6 +14,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,11 +30,13 @@ import generated.drawable_someone_else
 import org.jetbrains.studchat.messagesParser.SymbolAnnotationType
 import org.jetbrains.studchat.messagesParser.messageFormatter
 import platform.painterResourceMultiplatform
+import themes.Theme
 
 @Composable
 fun Messages(
     conversationUiState: ConversationUiState,
     scrollState: LazyListState,
+    theme: State<Theme>,
 ) {
     val messages = conversationUiState.messages
     LazyColumn(
@@ -55,7 +58,8 @@ fun Messages(
                 msg = msg,
                 isUserMe = msg.author == "me",
                 isFirstMessageByAuthor = isFirstMessageByAuthor,
-                isLastMessageByAuthor = isLastMessageByAuthor
+                isLastMessageByAuthor = isLastMessageByAuthor,
+                theme = theme
             )
         }
     }
@@ -70,11 +74,12 @@ fun Message(
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
     isLastMessageByAuthor: Boolean,
+    theme: State<Theme>,
 ) {
     val borderColor = if (isUserMe) {
-        Color.Transparent
+        theme.value.myMessageColors.messageBackground
     } else {
-        Color.White
+        theme.value.othersMessageColors.messageText
     }
 
     val spaceBetweenAuthors = if (isLastMessageByAuthor) Modifier.padding(top = 8.dp) else Modifier
@@ -107,7 +112,8 @@ fun Message(
             authorClicked = onAuthorClick,
             modifier = Modifier
                 .padding(end = 16.dp)
-                .weight(1f)
+                .weight(1f),
+            theme = theme
         )
     }
 }
@@ -131,12 +137,13 @@ fun AuthorAndTextMessage(
     isLastMessageByAuthor: Boolean,
     authorClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
+    theme: State<Theme>,
 ) {
     Column(modifier = modifier) {
         if (isLastMessageByAuthor) {
             AuthorNameTimestamp(msg)
         }
-        ChatItemBubble(msg, isUserMe, authorClicked = authorClicked)
+        ChatItemBubble(msg, isUserMe, authorClicked = authorClicked, theme)
         if (isFirstMessageByAuthor) {
             // Last bubble before next author
             Spacer(modifier = Modifier.height(8.dp))
@@ -153,7 +160,7 @@ private fun AuthorNameTimestamp(msg: Message) {
     Row(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         Text(
             text = msg.author,
-            style = MaterialTheme.typography.h2,
+            style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .alignBy(LastBaseline)
                 .paddingFrom(LastBaseline, after = 8.dp) // Space to 1st bubble
@@ -161,7 +168,7 @@ private fun AuthorNameTimestamp(msg: Message) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = msg.timestamp,
-            style = MaterialTheme.typography.body2,
+            style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
             modifier = Modifier.alignBy(LastBaseline),
             color = Color.Black
         )
@@ -173,12 +180,13 @@ fun ChatItemBubble(
     message: Message,
     isUserMe: Boolean,
     authorClicked: (String) -> Unit,
+    theme: State<Theme>,
 ) {
 
     val backgroundBubbleColor = if (isUserMe) {
-        Color.Cyan
+        theme.value.myMessageColors.messageBackground
     } else {
-        Color.LightGray
+        theme.value.othersMessageColors.messageBackground
     }
 
     Column {
@@ -189,7 +197,8 @@ fun ChatItemBubble(
             ClickableMessage(
                 message = message,
                 isUserMe = isUserMe,
-                authorClicked = authorClicked
+                authorClicked = authorClicked,
+                theme = theme
             )
         }
 
@@ -218,17 +227,24 @@ fun ClickableMessage(
     message: Message,
     isUserMe: Boolean,
     authorClicked: (String) -> Unit,
+    theme: State<Theme>,
 ) {
     val uriHandler = LocalUriHandler.current
 
+    val mainTextColor = when(isUserMe) {
+        true -> theme.value.myMessageColors.messageText
+        false -> theme.value.othersMessageColors.messageText
+    }
+
     val styledMessage = messageFormatter(
         text = message.content,
-        primary = isUserMe
+        primary = isUserMe,
+        theme = theme
     )
 
     ClickableText(
         text = styledMessage,
-        style = MaterialTheme.typography.body1.copy(color = Color.Black),
+        style = MaterialTheme.typography.body1.copy(color = mainTextColor),
         modifier = Modifier.padding(16.dp),
         onClick = {
             styledMessage

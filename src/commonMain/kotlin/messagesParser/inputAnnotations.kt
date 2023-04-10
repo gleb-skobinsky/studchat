@@ -1,6 +1,7 @@
 package org.jetbrains.studchat.messagesParser
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -11,6 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
+import themes.Theme
 
 val symbolPattern by lazy {
     Regex("""(https?://[^\s\t\n]+)|(`[^`]+`)|(@\w+)|(\*[\w]+\*)|(_[\w]+_)|(~[\w]+~)""")
@@ -28,13 +30,14 @@ private fun getSymbolAnnotation(
     matchResult: MatchResult,
     primary: Boolean,
     codeSnippetBackground: Color,
+    theme: State<Theme>,
 ): SymbolAnnotation {
     return when (matchResult.value.first()) {
         '@' -> SymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
                 spanStyle = SpanStyle(
-                    color = if (primary) Color.White else Color.Blue,
+                    color = if (primary) theme.value.myMessageColors.highlightedText else theme.value.othersMessageColors.highlightedText,
                     fontWeight = FontWeight.Bold
                 )
             ),
@@ -87,7 +90,7 @@ private fun getSymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
                 spanStyle = SpanStyle(
-                    color = if (primary) Color.White else Color.Blue
+                    color = if (primary) theme.value.myMessageColors.highlightedText else theme.value.othersMessageColors.highlightedText
                 )
             ),
             StringAnnotation(
@@ -106,6 +109,7 @@ private fun getSymbolAnnotation(
 fun messageFormatter(
     text: String,
     primary: Boolean,
+    theme: State<Theme>,
 ): AnnotatedString {
     val tokens = symbolPattern.findAll(text)
 
@@ -115,9 +119,9 @@ fun messageFormatter(
 
         val codeSnippetBackground =
             if (primary) {
-                Color.Black
+                theme.value.myMessageColors.codeBackground
             } else {
-                Color.Gray
+                theme.value.othersMessageColors.codeBackground
             }
 
         for (token in tokens) {
@@ -126,7 +130,8 @@ fun messageFormatter(
             val (annotatedString, stringAnnotation) = getSymbolAnnotation(
                 matchResult = token,
                 primary = primary,
-                codeSnippetBackground = codeSnippetBackground
+                codeSnippetBackground = codeSnippetBackground,
+                theme = theme
             )
             append(annotatedString)
 
