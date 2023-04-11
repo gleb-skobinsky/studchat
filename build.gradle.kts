@@ -98,7 +98,7 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
-                implementation("com.squareup.okhttp3:okhttp:4.9.2")
+                implementation("com.squareup.okhttp3:okhttp:4.10.0")
             }
         }
 
@@ -107,8 +107,9 @@ kotlin {
             dependencies {
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.9.0")
-                implementation("androidx.activity:activity-compose:1.6.1")
-                implementation("com.squareup.okhttp3:okhttp:4.9.2")
+                implementation("androidx.activity:activity-compose:1.7.0")
+                implementation("com.squareup.okhttp3:okhttp:4.10.0")
+                implementation("com.google.accompanist:accompanist-insets:0.21.0-beta")
             }
         }
 

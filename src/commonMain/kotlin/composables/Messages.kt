@@ -43,6 +43,7 @@ fun Messages(
         reverseLayout = true,
         contentPadding = PaddingValues(start = 10.dp, end = 10.dp, top = 20.dp, bottom = 150.dp),
         modifier = Modifier
+            .padding(50.dp)
             .fillMaxSize(),
         state = scrollState
     ) {
@@ -64,8 +65,6 @@ fun Messages(
         }
     }
 }
-
-//TODO: fix for web
 
 @Composable
 fun Message(
