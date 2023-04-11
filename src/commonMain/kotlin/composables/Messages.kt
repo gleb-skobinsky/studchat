@@ -43,7 +43,7 @@ fun Messages(
         reverseLayout = true,
         contentPadding = PaddingValues(start = 10.dp, end = 10.dp, top = 20.dp, bottom = 150.dp),
         modifier = Modifier
-            .padding(50.dp)
+            .padding(top = 50.dp)
             .fillMaxSize(),
         state = scrollState
     ) {
@@ -230,7 +230,7 @@ fun ClickableMessage(
 ) {
     val uriHandler = LocalUriHandler.current
 
-    val mainTextColor = when(isUserMe) {
+    val mainTextColor = when (isUserMe) {
         true -> theme.value.myMessageColors.messageText
         false -> theme.value.othersMessageColors.messageText
     }

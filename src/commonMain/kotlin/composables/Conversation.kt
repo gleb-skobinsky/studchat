@@ -15,10 +15,7 @@ import data.AdditionalUiState
 import data.ConversationUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import platform.generateUuid
-import platform.getTimeNow
-import platform.onMessageEnter
-import platform.userInputModifier
+import platform.*
 import themes.Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,8 +110,7 @@ private fun ConversationContent(
             onNavIconPressed = onNavIconPressed,
             scrollBehavior = scrollBehavior,
             // Use statusBarsPadding() to move the app bar content below the status bar
-            modifier = Modifier,
+            modifier = Modifier.statusBarsPaddingMpp(),
         )
-
     }
 }
