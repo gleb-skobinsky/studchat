@@ -26,7 +26,7 @@ import platform.painterResourceMultiplatform
 import themes.toBoolean
 
 @Composable
-fun ColumnScope.JetchatDrawer(
+fun JetchatDrawer(
     onProfileClicked: (String) -> Unit,
     onChatClicked: (String) -> Unit,
     onThemeChange: (Boolean) -> Unit,
@@ -67,12 +67,6 @@ fun ColumnScope.JetchatDrawer(
             )
         }
     }
-}
-
-@Composable
-private fun SettingsItem(
-) {
-
 }
 
 @Composable
