@@ -16,7 +16,7 @@ import data.ConversationUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import platform.*
-import themes.Theme
+import themes.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,11 +25,19 @@ fun Conversation(
     scope: CoroutineScope,
     scrollState: LazyListState,
     webSocket: Any?,
-    themeState: State<Theme>,
-    uiState: AdditionalUiState
+    uiState: AdditionalUiState,
 ) {
     val scaffoldState = rememberScaffoldState()
     val drawerOpen by uiState.drawerShouldBeOpened.collectAsState()
+    val themeMode by uiState.themeMode.collectAsState()
+    val theme = remember(themeMode) {
+        derivedStateOf {
+            when (themeMode) {
+                ThemeMode.LIGHT -> LightTheme
+                ThemeMode.DARK -> DarkTheme
+            }
+        }
+    }
     if (drawerOpen) {
         // Open drawer and reset state in VM.
         LaunchedEffect(Unit) {
@@ -40,6 +48,7 @@ fun Conversation(
 
     JetchatScaffold(
         scaffoldState,
+        uiState,
         onChatClicked = {
             scope.launch {
                 scaffoldState.drawerState.close()
@@ -49,12 +58,15 @@ fun Conversation(
             scope.launch {
                 scaffoldState.drawerState.close()
             }
+        },
+        onThemeChange = { value ->
+            uiState.switchTheme(value.toTheme())
         }
     ) {
         ConversationContent(
             conversationUiState = conversationUiState,
             scrollState = scrollState,
-            themeState = themeState,
+            themeState = theme,
             webSocket = webSocket,
             scope = scope,
             onNavIconPressed = {
@@ -64,9 +76,6 @@ fun Conversation(
             }
         )
     }
-
-
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

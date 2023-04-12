@@ -9,6 +9,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import typography.JetchatTypography
 
 private val JetchatDarkColorScheme = darkColorScheme(
     primary = Blue80,
@@ -67,3 +68,27 @@ private val JetchatLightColorScheme = lightColorScheme(
     onSurfaceVariant = BlueGrey30,
     outline = BlueGrey50
 )
+
+@Suppress("NewApi")
+@Composable
+fun JetchatTheme(
+    theme: ThemeMode = isSystemInDarkTheme().toTheme(),
+    content: @Composable () -> Unit,
+) {
+    val myColorScheme = when (theme) {
+        ThemeMode.DARK -> JetchatDarkColorScheme
+        ThemeMode.LIGHT -> JetchatLightColorScheme
+    }
+
+    MaterialTheme(
+        colorScheme = myColorScheme,
+        typography = JetchatTypography
+    ) {
+        // TODO (M3): MaterialTheme doesn't provide LocalIndication, remove when it does
+        val rippleIndication = rememberRipple()
+        CompositionLocalProvider(
+            LocalIndication provides rippleIndication,
+            content = content
+        )
+    }
+}

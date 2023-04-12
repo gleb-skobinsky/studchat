@@ -19,13 +19,16 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import data.AdditionalUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JetchatScaffold(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
+    uiState: AdditionalUiState,
     onProfileClicked: (String) -> Unit,
     onChatClicked: (String) -> Unit,
+    onThemeChange: (Boolean) -> Unit,
     content: @Composable (PaddingValues) -> Unit,
 ) {
 
@@ -35,7 +38,9 @@ fun JetchatScaffold(
             Column(Modifier.fillMaxHeight().width(300.dp)) {
                 JetchatDrawer(
                     onProfileClicked = onProfileClicked,
-                    onChatClicked = onChatClicked
+                    onChatClicked = onChatClicked,
+                    onThemeChange = onThemeChange,
+                    uiState = uiState
                 )
             }
         },
@@ -47,13 +52,13 @@ fun JetchatScaffold(
 
 class NavShape(
     private val widthOffset: Dp,
-    private val scale: Float
+    private val scale: Float,
 ) : Shape {
 
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,
-        density: Density
+        density: Density,
     ): Outline {
         return Outline.Rectangle(
             Rect(

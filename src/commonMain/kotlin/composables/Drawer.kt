@@ -6,24 +6,32 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
+import androidx.compose.material.Switch
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import data.AdditionalUiState
 import data.colleagueProfile
 import data.meProfile
 import generated.drawable_jetchat_icon_mpp
 import platform.painterResourceMultiplatform
+import themes.toBoolean
 
 @Composable
-fun ColumnScope.JetchatDrawer(onProfileClicked: (String) -> Unit, onChatClicked: (String) -> Unit) {
+fun ColumnScope.JetchatDrawer(
+    onProfileClicked: (String) -> Unit,
+    onChatClicked: (String) -> Unit,
+    onThemeChange: (Boolean) -> Unit,
+    uiState: AdditionalUiState,
+) {
     // Use statusBarsHeight() to add a spacer which pushes the drawer content
     // below the status bar (y-axis)
     Spacer(Modifier.height(3.dp))
@@ -38,6 +46,33 @@ fun ColumnScope.JetchatDrawer(onProfileClicked: (String) -> Unit, onChatClicked:
     ProfileItem("Taylor Brooks", colleagueProfile.photo) {
         onProfileClicked(colleagueProfile.userId)
     }
+    Box(
+        Modifier
+            .defaultMinSize(300.dp, 48.dp)
+            .fillMaxSize()
+    ) {
+        Row(
+            modifier = Modifier
+                .height(56.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .clip(CircleShape)
+        ) {
+            val checkedState by uiState.themeMode.collectAsState()
+            Switch(
+                checked = checkedState.toBoolean(),
+                onCheckedChange = {
+                    onThemeChange(it)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun SettingsItem(
+) {
+
 }
 
 @Composable
@@ -51,6 +86,7 @@ private fun DrawerHeader() {
         )
     }
 }
+
 @Composable
 private fun DrawerItemHeader(text: String) {
     Box(

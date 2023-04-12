@@ -123,8 +123,9 @@ class ConversationUiState(
 }
 
 @Stable
-class AdditionalUiState() {
-    val themeMode: MutableStateFlow<ThemeMode> = MutableStateFlow(ThemeMode.LIGHT)
+class AdditionalUiState {
+    private val _themeMode: MutableStateFlow<ThemeMode> = MutableStateFlow(ThemeMode.LIGHT)
+    val themeMode: StateFlow<ThemeMode> = _themeMode
     private val _drawerShouldBeOpened: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val drawerShouldBeOpened: StateFlow<Boolean> = _drawerShouldBeOpened
     fun openDrawer() {
@@ -133,5 +134,9 @@ class AdditionalUiState() {
 
     fun resetOpenDrawerAction() {
         _drawerShouldBeOpened.value = false
+    }
+
+    fun switchTheme(theme: ThemeMode) {
+        _themeMode.value = theme
     }
 }
