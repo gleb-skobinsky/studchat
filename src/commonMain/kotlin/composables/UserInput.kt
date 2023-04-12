@@ -1,5 +1,6 @@
 package composables
 
+import FunctionalityNotAvailablePopup
 import androidx.compose.animation.*
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.*
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -21,9 +23,8 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.layout.FirstBaseline
-import androidx.compose.ui.semantics.SemanticsPropertyKey
-import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -32,9 +33,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import FunctionalityNotAvailablePopup
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun UserInput(
     onMessageSent: (String) -> Unit,
@@ -55,12 +55,22 @@ fun UserInput(
     var textFieldFocusState by remember { mutableStateOf(false) }
 
     Surface(elevation = 2.dp) {
-        Column(modifier = modifier) {
+        val actualOnMessageSent = {
+            onMessageSent(textState.text.trim())
+            // Reset text field and close keyboard
+            textState = TextFieldValue()
+            // Move scroll to bottom
+            resetScroll()
+            dismissKeyboard()
+        }
+        Column(
+            modifier = modifier
+        ) {
             UserInputText(
                 textFieldValue = textState,
                 onTextChanged = { textState = it },
                 // Only show the keyboard if there's no input selector and text field has focus
-                keyboardShown = currentInputSelector == InputSelector.NONE && textFieldFocusState,
+                // keyboardShown = currentInputSelector == InputSelector.NONE && textFieldFocusState,
                 // Close extended selector if text field receives focus
                 onTextFieldFocused = { focused ->
                     if (focused) {
@@ -69,19 +79,13 @@ fun UserInput(
                     }
                     textFieldFocusState = focused
                 },
-                focusState = textFieldFocusState
+                focusState = textFieldFocusState,
+                onMessageSent = actualOnMessageSent
             )
             UserInputSelector(
                 onSelectorChange = { currentInputSelector = it },
                 sendMessageEnabled = textState.text.isNotBlank(),
-                onMessageSent = {
-                    onMessageSent(textState.text)
-                    // Reset text field and close keyboard
-                    textState = TextFieldValue()
-                    // Move scroll to bottom
-                    resetScroll()
-                    dismissKeyboard()
-                },
+                onMessageSent = actualOnMessageSent,
                 currentInputSelector = currentInputSelector
             )
             SelectorExpanded(
@@ -97,7 +101,7 @@ fun UserInput(
 private fun SelectorExpanded(
     currentSelector: InputSelector,
     onCloseRequested: () -> Unit,
-    onTextAdded: (String) -> Unit
+    onTextAdded: (String) -> Unit,
 ) {
     if (currentSelector == InputSelector.NONE) return
 
@@ -117,7 +121,9 @@ private fun SelectorExpanded(
             InputSelector.PICTURE -> FunctionalityNotAvailablePanel()
             InputSelector.MAP -> FunctionalityNotAvailablePanel()
             InputSelector.PHONE -> FunctionalityNotAvailablePanel()
-            else -> { throw NotImplementedError() }
+            else -> {
+                throw NotImplementedError()
+            }
         }
     }
 }
@@ -153,15 +159,16 @@ fun FunctionalityNotAvailablePanel() {
 }
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalFoundationApi
 @Composable
 private fun UserInputText(
     keyboardType: KeyboardType = KeyboardType.Text,
     onTextChanged: (TextFieldValue) -> Unit,
     textFieldValue: TextFieldValue,
-    keyboardShown: Boolean,
     onTextFieldFocused: (Boolean) -> Unit,
     focusState: Boolean,
+    onMessageSent: () -> Unit,
 ) {
     val a11ylabel = "Text input"
     Row(
@@ -181,9 +188,10 @@ private fun UserInputText(
                     .align(Alignment.Bottom)
             ) {
                 var lastFocusState by remember { mutableStateOf(false) }
+                var ctrlPressed by remember { mutableStateOf(false) }
                 BasicTextField(
                     value = textFieldValue,
-                    onValueChange = { onTextChanged(it) },
+                    onValueChange = { if (!ctrlPressed) onTextChanged(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 32.dp)
@@ -193,12 +201,42 @@ private fun UserInputText(
                                 onTextFieldFocused(state.isFocused)
                             }
                             lastFocusState = state.isFocused
+                        }
+                        .onKeyEvent {
+                            when (it.key) {
+                                Key.Enter -> {
+                                    if (it.type == KeyEventType.KeyDown && ctrlPressed) {
+                                        onMessageSent()
+                                        true
+                                    } else false
+                                }
+
+                                Key.CtrlLeft,
+                                Key.CtrlRight,
+                                -> {
+                                    when (it.type) {
+                                        KeyEventType.KeyDown -> {
+                                            ctrlPressed = true
+                                            true
+                                        }
+
+                                        KeyEventType.KeyUp -> {
+                                            ctrlPressed = false
+                                            true
+                                        }
+
+                                        else -> false
+                                    }
+                                }
+
+                                else -> false
+                            }
                         },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = keyboardType,
                         imeAction = ImeAction.Send
                     ),
-                    maxLines = 1,
+                    maxLines = 100,
                     cursorBrush = SolidColor(LocalContentColor.current),
                     textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current)
                 )
@@ -224,7 +262,7 @@ private fun UserInputSelector(
     sendMessageEnabled: Boolean,
     onMessageSent: () -> Unit,
     currentInputSelector: InputSelector,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -303,7 +341,7 @@ private fun InputSelectorButton(
     onClick: () -> Unit,
     icon: ImageVector,
     description: String,
-    selected: Boolean
+    selected: Boolean,
 ) {
     val backgroundModifier = if (selected) {
         Modifier.background(
@@ -336,8 +374,8 @@ private fun NotAvailablePopup(onDismissed: () -> Unit) {
     FunctionalityNotAvailablePopup(onDismissed)
 }
 
-val KeyboardShownKey = SemanticsPropertyKey<Boolean>("KeyboardShownKey")
-var SemanticsPropertyReceiver.keyboardShownProperty by KeyboardShownKey
+// val KeyboardShownKey = SemanticsPropertyKey<Boolean>("KeyboardShownKey")
+// var SemanticsPropertyReceiver.keyboardShownProperty by KeyboardShownKey
 
 enum class EmojiStickerSelector {
     EMOJI,
@@ -347,7 +385,7 @@ enum class EmojiStickerSelector {
 @Composable
 fun EmojiSelector(
     onTextAdded: (String) -> Unit,
-    focusRequester: FocusRequester
+    focusRequester: FocusRequester,
 ) {
     var selected by remember { mutableStateOf(EmojiStickerSelector.EMOJI) }
 
@@ -391,7 +429,7 @@ fun ExtendedSelectorInnerButton(
     text: String,
     onClick: () -> Unit,
     selected: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val colors = ButtonDefaults.buttonColors(
         backgroundColor = Color.White.copy(alpha = 0.08f),
@@ -418,7 +456,7 @@ fun ExtendedSelectorInnerButton(
 @Composable
 fun EmojiTable(
     onTextAdded: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier.fillMaxWidth()) {
         repeat(4) { x ->
