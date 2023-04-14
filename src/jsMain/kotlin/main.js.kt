@@ -1,5 +1,7 @@
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.window.Window
@@ -13,6 +15,7 @@ import org.jetbrains.skiko.wasm.onWasmReady
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.events.WheelEvent
 import platform.getPlatformWebsocket
+import themes.JetchatTheme
 
 fun main() {
     resizeCanvas()
@@ -23,8 +26,11 @@ fun main() {
             val scrollState = rememberLazyListState()
             val ws: Any? = remember { getPlatformWebsocket() }
             val uiState = AdditionalUiState()
-            Column {
-                Conversation(exampleUiState, coroutineScope, scrollState, ws, uiState = uiState)
+            val theme by uiState.themeMode.collectAsState()
+            JetchatTheme(theme) {
+                Column {
+                    Conversation(exampleUiState, coroutineScope, scrollState, ws, uiState = uiState)
+                }
             }
             window.addEventListener("wheel", {
                 val delta = (it as WheelEvent).deltaY
