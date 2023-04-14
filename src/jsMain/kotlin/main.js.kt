@@ -27,18 +27,9 @@ fun main() {
             val scrollCoroutine = rememberCoroutineScope()
             val scrollState = rememberLazyListState()
             val ws: Any? = remember { getPlatformWebsocket() }
-            val themeMode = remember { mutableStateOf(ThemeMode.LIGHT) }
-            val theme = remember(themeMode.value) {
-                derivedStateOf {
-                    when(themeMode.value) {
-                        ThemeMode.LIGHT -> LightTheme
-                        ThemeMode.DARK -> DarkTheme
-                    }
-                }
-            }
             val uiState = AdditionalUiState()
             Column {
-                Conversation(exampleUiState, coroutineScope, scrollState, ws, themeState = theme, uiState = uiState)
+                Conversation(exampleUiState, coroutineScope, scrollState, ws, uiState = uiState)
             }
             window.addEventListener("wheel", {
                 val delta = (it as WheelEvent).deltaY

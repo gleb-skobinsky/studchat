@@ -1,6 +1,7 @@
 package composables
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,16 +10,14 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.platform.LocalUriHandler
@@ -30,21 +29,21 @@ import generated.drawable_someone_else
 import org.jetbrains.studchat.messagesParser.SymbolAnnotationType
 import org.jetbrains.studchat.messagesParser.messageFormatter
 import platform.painterResourceMultiplatform
-import themes.Theme
 
 @Composable
 fun Messages(
     conversationUiState: ConversationUiState,
     scrollState: LazyListState,
-    theme: State<Theme>,
 ) {
     val messages = conversationUiState.messages
+    val mainBackground = MaterialTheme.colorScheme.background
     LazyColumn(
         reverseLayout = true,
         contentPadding = PaddingValues(start = 10.dp, end = 10.dp, top = 20.dp, bottom = 150.dp),
         modifier = Modifier
             .padding(top = 50.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(mainBackground),
         state = scrollState
     ) {
         items(count = messages.size, key = { messages[it].id }) { index ->
@@ -60,7 +59,6 @@ fun Messages(
                 isUserMe = msg.author == "me",
                 isFirstMessageByAuthor = isFirstMessageByAuthor,
                 isLastMessageByAuthor = isLastMessageByAuthor,
-                theme = theme
             )
         }
     }
@@ -73,12 +71,11 @@ fun Message(
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
     isLastMessageByAuthor: Boolean,
-    theme: State<Theme>,
 ) {
     val borderColor = if (isUserMe) {
-        theme.value.myMessageColors.messageBackground
+        MaterialTheme.colorScheme.primary
     } else {
-        theme.value.othersMessageColors.messageText
+        MaterialTheme.colorScheme.onSecondary
     }
 
     val spaceBetweenAuthors = if (isLastMessageByAuthor) Modifier.padding(top = 8.dp) else Modifier
@@ -112,7 +109,6 @@ fun Message(
             modifier = Modifier
                 .padding(end = 16.dp)
                 .weight(1f),
-            theme = theme
         )
     }
 }
@@ -136,13 +132,12 @@ fun AuthorAndTextMessage(
     isLastMessageByAuthor: Boolean,
     authorClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
-    theme: State<Theme>,
 ) {
     Column(modifier = modifier) {
         if (isLastMessageByAuthor) {
             AuthorNameTimestamp(msg)
         }
-        ChatItemBubble(msg, isUserMe, authorClicked = authorClicked, theme)
+        ChatItemBubble(msg, isUserMe, authorClicked = authorClicked)
         if (isFirstMessageByAuthor) {
             // Last bubble before next author
             Spacer(modifier = Modifier.height(8.dp))
@@ -155,11 +150,13 @@ fun AuthorAndTextMessage(
 
 @Composable
 private fun AuthorNameTimestamp(msg: Message) {
+    val textColor = MaterialTheme.colorScheme.onSurfaceVariant
     // Combine author and timestamp for a11y.
     Row(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         Text(
             text = msg.author,
             style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
+            color = textColor,
             modifier = Modifier
                 .alignBy(LastBaseline)
                 .paddingFrom(LastBaseline, after = 8.dp) // Space to 1st bubble
@@ -169,7 +166,7 @@ private fun AuthorNameTimestamp(msg: Message) {
             text = msg.timestamp,
             style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
             modifier = Modifier.alignBy(LastBaseline),
-            color = Color.Black
+            color = textColor
         )
     }
 }
@@ -179,13 +176,12 @@ fun ChatItemBubble(
     message: Message,
     isUserMe: Boolean,
     authorClicked: (String) -> Unit,
-    theme: State<Theme>,
 ) {
 
     val backgroundBubbleColor = if (isUserMe) {
-        theme.value.myMessageColors.messageBackground
+        MaterialTheme.colorScheme.primary
     } else {
-        theme.value.othersMessageColors.messageBackground
+        MaterialTheme.colorScheme.secondary
     }
 
     Column {
@@ -197,7 +193,6 @@ fun ChatItemBubble(
                 message = message,
                 isUserMe = isUserMe,
                 authorClicked = authorClicked,
-                theme = theme
             )
         }
 
@@ -226,24 +221,22 @@ fun ClickableMessage(
     message: Message,
     isUserMe: Boolean,
     authorClicked: (String) -> Unit,
-    theme: State<Theme>,
 ) {
     val uriHandler = LocalUriHandler.current
 
     val mainTextColor = when (isUserMe) {
-        true -> theme.value.myMessageColors.messageText
-        false -> theme.value.othersMessageColors.messageText
+        true -> MaterialTheme.colorScheme.onPrimary
+        false -> MaterialTheme.colorScheme.onSecondary
     }
 
     val styledMessage = messageFormatter(
         text = message.content,
         primary = isUserMe,
-        theme = theme
     )
 
     ClickableText(
         text = styledMessage,
-        style = MaterialTheme.typography.body1.copy(color = mainTextColor),
+        style = androidx.compose.material.MaterialTheme.typography.body1.copy(color = mainTextColor),
         modifier = Modifier.padding(16.dp),
         onClick = {
             styledMessage

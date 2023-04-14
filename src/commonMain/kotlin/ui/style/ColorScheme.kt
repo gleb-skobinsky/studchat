@@ -1,4 +1,4 @@
-package org.jetbrains.studchat.ui.style
+package ui.style
 
 import androidx.compose.ui.graphics.Color
 

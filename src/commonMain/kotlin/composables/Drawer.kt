@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Switch
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -46,6 +49,11 @@ fun JetchatDrawer(
     ProfileItem("Taylor Brooks", colleagueProfile.photo) {
         onProfileClicked(colleagueProfile.userId)
     }
+    ThemeSwitch(uiState, onThemeChange)
+}
+
+@Composable
+private fun ThemeSwitch(uiState: AdditionalUiState, onThemeChange: (Boolean) -> Unit) {
     Box(
         Modifier
             .defaultMinSize(300.dp, 48.dp)
@@ -58,12 +66,28 @@ fun JetchatDrawer(
                 .padding(horizontal = 12.dp)
                 .clip(CircleShape)
         ) {
+
             val checkedState by uiState.themeMode.collectAsState()
+            val iconColor = MaterialTheme.colorScheme.onSecondary
+            val commonModifier = Modifier.align(Alignment.CenterVertically)
+            Icon(
+                imageVector = Icons.Outlined.LightMode,
+                contentDescription = "Light theme",
+                modifier = commonModifier,
+                tint = iconColor
+            )
             Switch(
                 checked = checkedState.toBoolean(),
                 onCheckedChange = {
                     onThemeChange(it)
-                }
+                },
+                modifier = commonModifier
+            )
+            Icon(
+                imageVector = Icons.Outlined.DarkMode,
+                contentDescription = "Dark theme",
+                modifier = commonModifier,
+                tint = iconColor
             )
         }
     }
@@ -100,7 +124,7 @@ private fun DrawerItemHeader(text: String) {
 @Composable
 private fun ChatItem(text: String, selected: Boolean, onChatClicked: () -> Unit) {
     val background = if (selected) {
-        Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+        Modifier.background(MaterialTheme.colorScheme.tertiary)
     } else {
         Modifier
     }

@@ -65,6 +65,7 @@ fun UserInput(
         }
         Column(
             modifier = modifier
+                .background(androidx.compose.material3.MaterialTheme.colorScheme.onBackground)
         ) {
             UserInputText(
                 textFieldValue = textState,
@@ -171,6 +172,7 @@ private fun UserInputText(
     onMessageSent: () -> Unit,
 ) {
     val a11ylabel = "Text input"
+    val textColor = androidx.compose.material3.MaterialTheme.colorScheme.onSecondary
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -184,6 +186,7 @@ private fun UserInputText(
             Box(
                 modifier = Modifier
                     .height(64.dp)
+                    .background(androidx.compose.material3.MaterialTheme.colorScheme.onBackground)
                     .weight(1f)
                     .align(Alignment.Bottom)
             ) {
@@ -237,8 +240,8 @@ private fun UserInputText(
                         imeAction = ImeAction.Send
                     ),
                     maxLines = 100,
-                    cursorBrush = SolidColor(LocalContentColor.current),
-                    textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current)
+                    cursorBrush = SolidColor(textColor),
+                    textStyle = LocalTextStyle.current.copy(color = textColor)
                 )
 
                 val disableContentColor = Color.LightGray

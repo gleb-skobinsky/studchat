@@ -6,6 +6,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import ui.style.ColorScheme
 
 fun Modifier.innerShadow() = this.drawBehind {
     val stepsHeight = (size.height / 8).toInt()

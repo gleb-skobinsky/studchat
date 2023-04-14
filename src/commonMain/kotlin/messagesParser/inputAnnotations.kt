@@ -1,7 +1,7 @@
 package org.jetbrains.studchat.messagesParser
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -12,7 +12,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
-import themes.Theme
 
 val symbolPattern by lazy {
     Regex("""(https?://[^\s\t\n]+)|(`[^`]+`)|(@\w+)|(\*[\w]+\*)|(_[\w]+_)|(~[\w]+~)""")
@@ -26,18 +25,18 @@ typealias StringAnnotation = AnnotatedString.Range<String>
 // Pair returning styled content and annotation for ClickableText when matching syntax token
 typealias SymbolAnnotation = Pair<AnnotatedString, StringAnnotation?>
 
+@Composable
 private fun getSymbolAnnotation(
     matchResult: MatchResult,
     primary: Boolean,
     codeSnippetBackground: Color,
-    theme: State<Theme>,
 ): SymbolAnnotation {
     return when (matchResult.value.first()) {
         '@' -> SymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
                 spanStyle = SpanStyle(
-                    color = if (primary) theme.value.myMessageColors.highlightedText else theme.value.othersMessageColors.highlightedText,
+                    color = if (primary) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant,
                     fontWeight = FontWeight.Bold
                 )
             ),
@@ -90,7 +89,7 @@ private fun getSymbolAnnotation(
             AnnotatedString(
                 text = matchResult.value,
                 spanStyle = SpanStyle(
-                    color = if (primary) theme.value.myMessageColors.highlightedText else theme.value.othersMessageColors.highlightedText
+                    color = if (primary) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant
                 )
             ),
             StringAnnotation(
@@ -109,7 +108,6 @@ private fun getSymbolAnnotation(
 fun messageFormatter(
     text: String,
     primary: Boolean,
-    theme: State<Theme>,
 ): AnnotatedString {
     val tokens = symbolPattern.findAll(text)
 
@@ -119,9 +117,9 @@ fun messageFormatter(
 
         val codeSnippetBackground =
             if (primary) {
-                theme.value.myMessageColors.codeBackground
+                androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer
             } else {
-                theme.value.othersMessageColors.codeBackground
+                androidx.compose.material3.MaterialTheme.colorScheme.secondaryContainer
             }
 
         for (token in tokens) {
@@ -131,7 +129,6 @@ fun messageFormatter(
                 matchResult = token,
                 primary = primary,
                 codeSnippetBackground = codeSnippetBackground,
-                theme = theme
             )
             append(annotatedString)
 

@@ -29,15 +29,6 @@ fun Conversation(
 ) {
     val scaffoldState = rememberScaffoldState()
     val drawerOpen by uiState.drawerShouldBeOpened.collectAsState()
-    val themeMode by uiState.themeMode.collectAsState()
-    val theme = remember(themeMode) {
-        derivedStateOf {
-            when (themeMode) {
-                ThemeMode.LIGHT -> LightTheme
-                ThemeMode.DARK -> DarkTheme
-            }
-        }
-    }
     if (drawerOpen) {
         // Open drawer and reset state in VM.
         LaunchedEffect(Unit) {
@@ -66,7 +57,6 @@ fun Conversation(
         ConversationContent(
             conversationUiState = conversationUiState,
             scrollState = scrollState,
-            themeState = theme,
             webSocket = webSocket,
             scope = scope,
             onNavIconPressed = {
@@ -83,14 +73,13 @@ fun Conversation(
 private fun ConversationContent(
     conversationUiState: ConversationUiState,
     scrollState: LazyListState,
-    themeState: State<Theme>,
     webSocket: Any?,
     scope: CoroutineScope,
     onNavIconPressed: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Box(modifier = Modifier.fillMaxSize()) {
-        Messages(conversationUiState, scrollState, themeState)
+        Messages(conversationUiState, scrollState)
         Column(
             Modifier
                 .align(Alignment.BottomCenter)
