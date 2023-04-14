@@ -1,7 +1,5 @@
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.window.Window
@@ -15,9 +13,6 @@ import org.jetbrains.skiko.wasm.onWasmReady
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.events.WheelEvent
 import platform.getPlatformWebsocket
-import themes.DarkTheme
-import themes.LightTheme
-import themes.ThemeMode
 
 fun main() {
     resizeCanvas()

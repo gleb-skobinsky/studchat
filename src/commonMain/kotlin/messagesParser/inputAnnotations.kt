@@ -117,9 +117,9 @@ fun messageFormatter(
 
         val codeSnippetBackground =
             if (primary) {
-                androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer
+                MaterialTheme.colorScheme.primaryContainer
             } else {
-                androidx.compose.material3.MaterialTheme.colorScheme.secondaryContainer
+                MaterialTheme.colorScheme.secondaryContainer
             }
 
         for (token in tokens) {

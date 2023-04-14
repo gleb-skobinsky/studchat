@@ -155,7 +155,7 @@ private fun AuthorNameTimestamp(msg: Message) {
     Row(modifier = Modifier.semantics(mergeDescendants = true) {}) {
         Text(
             text = msg.author,
-            style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleMedium,
             color = textColor,
             modifier = Modifier
                 .alignBy(LastBaseline)
@@ -164,7 +164,7 @@ private fun AuthorNameTimestamp(msg: Message) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = msg.timestamp,
-            style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.alignBy(LastBaseline),
             color = textColor
         )

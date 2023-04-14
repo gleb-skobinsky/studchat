@@ -1,4 +1,4 @@
-package org.jetbrains.studchat.ui.style
+package ui.style
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -6,8 +6,8 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import ui.style.ColorScheme
 
+@Suppress("Unused")
 fun Modifier.innerShadow() = this.drawBehind {
     val stepsHeight = (size.height / 8).toInt()
     val stepsWidth = (size.width / 8).toInt()
