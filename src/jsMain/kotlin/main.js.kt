@@ -26,12 +26,7 @@ fun main() {
             val scrollState = rememberLazyListState()
             val ws: Any? = remember { getPlatformWebsocket() }
             val uiState = AdditionalUiState()
-            val theme by uiState.themeMode.collectAsState()
-            JetchatTheme(theme) {
-                Column {
-                    Conversation(exampleUiState, coroutineScope, scrollState, ws, uiState = uiState)
-                }
-            }
+            ThemeWrapper(uiState, coroutineScope, scrollState, ws)
             window.addEventListener("wheel", {
                 val delta = (it as WheelEvent).deltaY
                 scrollCoroutine.launch {

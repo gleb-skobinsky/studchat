@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material.Button
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -54,6 +55,7 @@ fun Conversation(
             uiState.switchTheme(value.toTheme())
         }
     ) {
+        val theme by uiState.themeMode.collectAsState()
         ConversationContent(
             conversationUiState = conversationUiState,
             scrollState = scrollState,

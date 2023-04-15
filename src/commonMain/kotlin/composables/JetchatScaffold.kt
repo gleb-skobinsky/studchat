@@ -33,7 +33,6 @@ fun JetchatScaffold(
     onThemeChange: (Boolean) -> Unit,
     content: @Composable (PaddingValues) -> Unit,
 ) {
-
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = {

@@ -124,7 +124,7 @@ class ConversationUiState(
 
 @Stable
 class AdditionalUiState {
-    private val _themeMode: MutableStateFlow<ThemeMode> = MutableStateFlow(ThemeMode.LIGHT)
+    val _themeMode: MutableStateFlow<ThemeMode> = MutableStateFlow(ThemeMode.LIGHT)
     val themeMode: StateFlow<ThemeMode> = _themeMode
     private val _drawerShouldBeOpened: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val drawerShouldBeOpened: StateFlow<Boolean> = _drawerShouldBeOpened

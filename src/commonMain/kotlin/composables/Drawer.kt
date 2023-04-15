@@ -25,6 +25,7 @@ import data.AdditionalUiState
 import data.colleagueProfile
 import data.meProfile
 import generated.drawable_jetchat_icon_mpp
+import platform.ThemeSwitch
 import platform.painterResourceMultiplatform
 import themes.toBoolean
 
@@ -52,46 +53,6 @@ fun JetchatDrawer(
     ThemeSwitch(uiState, onThemeChange)
 }
 
-@Composable
-private fun ThemeSwitch(uiState: AdditionalUiState, onThemeChange: (Boolean) -> Unit) {
-    Box(
-        Modifier
-            .defaultMinSize(300.dp, 48.dp)
-            .fillMaxSize()
-    ) {
-        Row(
-            modifier = Modifier
-                .height(56.dp)
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp)
-                .clip(CircleShape)
-        ) {
-
-            val checkedState by uiState.themeMode.collectAsState()
-            val iconColor = MaterialTheme.colorScheme.onSecondary
-            val commonModifier = Modifier.align(Alignment.CenterVertically)
-            Icon(
-                imageVector = Icons.Outlined.LightMode,
-                contentDescription = "Light theme",
-                modifier = commonModifier,
-                tint = iconColor
-            )
-            Switch(
-                checked = checkedState.toBoolean(),
-                onCheckedChange = {
-                    onThemeChange(it)
-                },
-                modifier = commonModifier
-            )
-            Icon(
-                imageVector = Icons.Outlined.DarkMode,
-                contentDescription = "Dark theme",
-                modifier = commonModifier,
-                tint = iconColor
-            )
-        }
-    }
-}
 
 @Composable
 private fun DrawerHeader() {

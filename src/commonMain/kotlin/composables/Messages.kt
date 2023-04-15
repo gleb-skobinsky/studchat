@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +30,7 @@ import generated.drawable_someone_else
 import org.jetbrains.studchat.messagesParser.SymbolAnnotationType
 import org.jetbrains.studchat.messagesParser.messageFormatter
 import platform.painterResourceMultiplatform
+import themes.toBoolean
 
 @Composable
 fun Messages(
