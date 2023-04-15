@@ -1,13 +1,8 @@
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.window.Window
-import composables.Conversation
 import data.AdditionalUiState
-import data.exampleUiState
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
@@ -15,7 +10,6 @@ import org.jetbrains.skiko.wasm.onWasmReady
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.events.WheelEvent
 import platform.getPlatformWebsocket
-import themes.JetchatTheme
 
 fun main() {
     resizeCanvas()
