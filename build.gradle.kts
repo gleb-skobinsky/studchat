@@ -122,7 +122,7 @@ kotlin {
         }
 
         val iosMain by creating {
-            dependsOn(commonMain)
+            // dependsOn(commonMain)
         }
         val macosMain by creating {
             dependsOn(iosMain)

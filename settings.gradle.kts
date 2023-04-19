@@ -25,4 +25,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "StudChat"
+rootProject.name = "studchat"

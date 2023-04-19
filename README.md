@@ -9,6 +9,7 @@ How to use:
 2. To run on Android: `./gradlew installDebug`
 3. To run in browser: `./gradlew jsBrowserRun`
 4. To run as a desktop app: `./gradlew run`
+5. To run in iOS emulator: `./gradlew iosDeployIPhone13Debug`
 
 ### iOS andMacOS will be coming soon
 
