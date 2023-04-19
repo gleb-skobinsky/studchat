@@ -39,7 +39,10 @@ kotlin {
             executable {
                 entryPoint = "main"
                 freeCompilerArgs += listOf(
-                    "-linker-option", "-framework", "-linker-option", "Metal"
+                    "-framework",
+                    "CoreFoundation",
+                    "-linker-option",
+                    "Metal"
                 )
             }
         }
