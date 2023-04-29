@@ -11,7 +11,7 @@ How to use:
 4. To run as a desktop app: `./gradlew run`
 5. To run in iOS emulator: `./gradlew iosDeployIPhone13Debug`
 
-### iOS andMacOS will be coming soon
+### iOS and MacOS will be coming soon
 
 ### This is how the UI looks like at the present stage
 
