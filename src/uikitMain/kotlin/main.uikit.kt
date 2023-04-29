@@ -37,7 +37,8 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
             Column {
                 // To skip upper part of screen.
                 Box(modifier = Modifier.height(30.dp))
-                MainView()
+                // MainView()
+                Text("Hello world!")
             }
         }
         window!!.makeKeyAndVisible()

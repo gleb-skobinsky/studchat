@@ -39,7 +39,10 @@ kotlin {
             executable {
                 entryPoint = "main"
                 freeCompilerArgs += listOf(
-                    "-linker-option", "-framework", "-linker-option", "Metal"
+                    "-framework",
+                    "CoreFoundation",
+                    "-linker-option",
+                    "Metal"
                 )
             }
         }
@@ -122,7 +125,7 @@ kotlin {
         }
 
         val iosMain by creating {
-            dependsOn(commonMain)
+            // dependsOn(commonMain)
         }
         val macosMain by creating {
             dependsOn(iosMain)
