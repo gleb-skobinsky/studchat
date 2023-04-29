@@ -17,7 +17,7 @@ How to use:
 
 Android:
 
-![Android](https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/android.png)
+![Android](https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/android.png | height=600)
 
 Desktop: 
 
