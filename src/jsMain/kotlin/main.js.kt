@@ -1,6 +1,7 @@
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.window.Window
 import data.AdditionalUiState
 import kotlinx.browser.document
@@ -20,6 +21,8 @@ fun main() {
             val scrollState = rememberLazyListState()
             val ws: Any? = remember { getPlatformWebsocket() }
             val uiState = AdditionalUiState()
+            val locale = Locale("en-US")
+            console.log(locale)
             ThemeWrapper(uiState, coroutineScope, scrollState, ws)
             window.addEventListener("wheel", {
                 val delta = (it as WheelEvent).deltaY
