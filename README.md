@@ -17,7 +17,7 @@ How to use:
 
 Android:
 
-<img src="https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/android.png" alt="Android" style="max-height: 600px;">
+<img src="https://raw.githubusercontent.com/gleb-skobinsky/studchat/master/screenshots/android.png" alt="Android" height="600">
 
 Desktop: 
 
