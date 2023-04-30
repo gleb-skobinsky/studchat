@@ -1,6 +1,7 @@
 # Chat app with Compose Multiplatform
 
 > **Warning**
+> 
 > This repo is deprecated. New code and supported platforms have been moved [here](https://github.com/gleb-skobinsky/compose-connect)
 
 An example Compose Multiplatform chat app, built using the [JetChat](https://androidexample365.com/a-sample-chat-app-built-with-jetpack-compose/) composables.
